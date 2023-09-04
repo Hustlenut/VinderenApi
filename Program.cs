@@ -1,4 +1,17 @@
 var builder = WebApplication.CreateBuilder(args);
+//TODO: Provide secure policies
+builder.Services.AddCors(
+    options =>
+    {
+        options.AddPolicy("AllowAll",
+            builder => builder
+                .AllowAnyHeader()
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+
+        );
+    }
+);
 
 // Add services to the container.
 
