@@ -1,6 +1,9 @@
-﻿namespace VinderenApi.DbContext
+﻿
+
+namespace VinderenApi.DbContext
 {
-    public class EntityContext
+    public class EntityContext  
     {
+        public EntityContext() { }
     }
 }

@@ -1,8 +1,8 @@
-﻿namespace VinderenApi.Enums.Interface
+﻿namespace VinderenApi.Discipline.Interface
 {
     public interface IProficiency
     {
-        int Level { get; set; }
+        ILevel Level { get; set; }
         string Description { get; set; }
 
     }

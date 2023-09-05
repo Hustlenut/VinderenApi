@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\huy_x\\source\\repos\\VinderenApi\\VinderenApi.csproj": {}
+    "D:\\ASPdotNet\\VinderenApi\\VinderenApi.csproj": {}
   },
   "projects": {
-    "C:\\Users\\huy_x\\source\\repos\\VinderenApi\\VinderenApi.csproj": {
+    "D:\\ASPdotNet\\VinderenApi\\VinderenApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\huy_x\\source\\repos\\VinderenApi\\VinderenApi.csproj",
+        "projectUniqueName": "D:\\ASPdotNet\\VinderenApi\\VinderenApi.csproj",
         "projectName": "VinderenApi",
-        "projectPath": "C:\\Users\\huy_x\\source\\repos\\VinderenApi\\VinderenApi.csproj",
-        "packagesPath": "C:\\Users\\huy_x\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\huy_x\\source\\repos\\VinderenApi\\obj\\",
+        "projectPath": "D:\\ASPdotNet\\VinderenApi\\VinderenApi.csproj",
+        "packagesPath": "C:\\Users\\Huy\\.nuget\\packages\\",
+        "outputPath": "D:\\ASPdotNet\\VinderenApi\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\huy_x\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Huy\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -26,6 +26,7 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -44,10 +45,6 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
-            "Microsoft.AspNetCore.Authentication.JwtBearer": {
-              "target": "Package",
-              "version": "[6.0.21, )"
-            },
             "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
               "target": "Package",
               "version": "[6.0.21, )"
@@ -82,24 +79,6 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[6.0.15, 6.0.15]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Host.win-x64",
-              "version": "[6.0.15, 6.0.15]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Ref",
-              "version": "[6.0.15, 6.0.15]"
-            },
-            {
-              "name": "Microsoft.WindowsDesktop.App.Ref",
-              "version": "[6.0.15, 6.0.15]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.AspNetCore.App": {
               "privateAssets": "none"

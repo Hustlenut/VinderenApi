@@ -1,4 +1,4 @@
-﻿namespace VinderenApi.Enums
+﻿namespace VinderenApi.Discipline
 {
     public enum Discipline
     {
