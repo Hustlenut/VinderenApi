@@ -12,7 +12,6 @@ namespace VinderenApi.DbContext
             Taekwondo = Set<TaekwondoModel>();
             Kickboxing = Set<KickboxingModel>();
             Boxing = Set<BoxingModel>();
-
         }
 
         public DbSet<TaekwondoModel> Taekwondo { get; set; }
