@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using VinderenApi.DbContext;
+
 var builder = WebApplication.CreateBuilder(args);
 //TODO: Provide secure policies
 builder.Services.AddCors(
@@ -15,6 +18,12 @@ builder.Services.AddCors(
 
 // Add services to the container.
 
+// Adding IdentityDbContext
+builder.Services.AddDbContext<EntityContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+    options.UseLoggerFactory(LoggerFactory.Create(builder => builder.AddDebug()));
+});
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
