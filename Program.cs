@@ -25,11 +25,14 @@ builder.Services.AddCors(
 // Add services to the container.
 
 // Adding IdentityDbContext
-var dbConn = builder.Configuration["SmarterASPNET:DbConnectionString"];
+// Get the secret connection string before declaring the var.
+builder.Configuration.AddUserSecrets<Program>();
+
+var dbConn = builder.Configuration["Secret:SmarterASPNET"];
 
 builder.Services.AddDbContext<EntityContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString(dbConn));
+    options.UseSqlServer(dbConn); //builder.Configuration.GetConnectionString() gets the string from appsettings.
     options.UseLoggerFactory(LoggerFactory.Create(builder => builder.AddDebug()));
 });
 
