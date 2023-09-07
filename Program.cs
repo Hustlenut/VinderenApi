@@ -35,8 +35,14 @@ builder.Services.AddDbContext<EntityContext>(options =>
     options.UseSqlServer(dbConn); //builder.Configuration.GetConnectionString() gets the string from appsettings.
     options.UseLoggerFactory(LoggerFactory.Create(builder => builder.AddDebug()));
 });
+// Create a singleton from a secret value to later generate a JWT token...
+var jwtConfigValue = builder.Configuration["Secret2:JwtConfig"];
+var jwtConfig = new JwtConfig
+{
+    Secret = jwtConfigValue
+};
 
-builder.Services.Configure<JwtConfig>(builder.Configuration.GetSection("JwtConfig"));
+builder.Services.AddSingleton(jwtConfig);
 
 builder.Services.AddAuthentication(options =>
 {
