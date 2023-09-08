@@ -52,15 +52,15 @@ builder.Services.AddAuthentication(options =>
 })
     .AddJwtBearer(jwt =>
     {
-        var key = Encoding.ASCII.GetBytes(builder.Configuration.GetSection("JwtConfig:Secret").Value);
+        var key = Encoding.ASCII.GetBytes(jwtConfig.Secret);
 
         jwt.SaveToken = true;
         jwt.TokenValidationParameters = new TokenValidationParameters()
         {
             ValidateIssuerSigningKey = true,
             IssuerSigningKey = new SymmetricSecurityKey(key),
-            ValidateIssuer = false, //remember to switch to true in production...
-            ValidateAudience = false, //remember to switch to true in production...
+            ValidateIssuer = true, //remember to switch to true in production...
+            ValidateAudience = true, //remember to switch to true in production...
             RequireExpirationTime = false, //remember to switch to true in production, check out refresh token.
             ValidateLifetime = true
         };

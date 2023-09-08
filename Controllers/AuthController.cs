@@ -69,7 +69,6 @@ namespace VinderenApi.Controllers
                     //Generate token
                     var token = GenerateJwtToken(new_user);
 
-                    //Map this DTO to the IdentityEntity and save to the db
                     //var person = new Person
                     //{
                     //    Name = requestDto?.Name,
@@ -101,6 +100,58 @@ namespace VinderenApi.Controllers
             }
 
             return BadRequest();
+        }
+
+        [Route("Login")]
+        [HttpPost]
+        public async Task<IActionResult> Login([FromBody] UserLoginRequestDto loginRequest)
+        {
+            if (ModelState.IsValid)
+            {
+                //check if user exist
+                var existing_user = await _userManager.FindByEmailAsync(loginRequest.Email);
+
+                if (existing_user == null)
+                {
+                    return BadRequest(new AuthResult()
+                    {
+                        Errors = new List<string>()
+                        {
+                            "Invalid payload"
+                        },
+                        Result = false
+                    });
+                }
+
+                var isCorrect = await _userManager.CheckPasswordAsync(existing_user, loginRequest.Password); 
+                //Because without await, the code would continue executing immediately after calling CheckPasswordAsync, which might result in incorrect behavior because you would not have the result of the validation yet. 
+                if (!isCorrect)
+                    return BadRequest(new AuthResult()
+                    {
+                        Errors = new List<string>()
+                        {
+                            "Invalid credentials"
+                        },
+                        Result = false
+                    });
+
+                var jwtToken = GenerateJwtToken(existing_user);
+
+                return Ok(new AuthResult()
+                {
+                    Token = jwtToken,
+                    Result = true
+                });
+            }
+
+            return BadRequest(new AuthResult()
+            {
+                Errors = new List<string>()
+                {
+                    "Invalid payload"
+                },
+                Result = false
+            });
         }
 
         private string GenerateJwtToken(IdentityUser user)
