@@ -1,0 +1,35 @@
+﻿@page
+@model VinderenApi.Pages.Authentication.AddAuthenticationModel
+@{
+    <h3>Use of AddAuthentication()</h3>
+    <pre>
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+
+
+            "options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;"
+
+            This line sets the default authentication scheme to use for authenticating requests. In your case,
+            it's set to JwtBearerDefaults.AuthenticationScheme, indicating that JWT Bearer Authentication will be the 
+            default method for authenticating requests.
+
+            "options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;"
+
+            This line sets the default authentication scheme for all authentication operations (e.g., HttpContext.AuthenticateAsync(), 
+            HttpContext.ForbidAsync(), etc.) to JwtBearerDefaults.AuthenticationScheme. This ensures that JWT Bearer Authentication is 
+            used throughout your application for various authentication-related tasks.
+
+            "options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;"
+
+            This line sets the default scheme for challenges (i.e., unauthorized responses) to JwtBearerDefaults.AuthenticationScheme. 
+            When a user tries to access a protected resource without proper authentication, your application will use JWT Bearer Authentication 
+            to challenge the user to provide a valid JWT token.
+            In summary, these lines configure your application to use JWT Bearer Authentication as the default authentication method 
+            and ensure that all authentication-related tasks and challenges are handled using this authentication scheme. 
+            It sets up the infrastructure needed to process JWT tokens during authentication and authorization processes.
+    </pre>
+}

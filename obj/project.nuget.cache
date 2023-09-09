@@ -1,10 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "rtS+ITOXvQjFxed+0ZPqMXhDFmba8HaCNHsgJ2ezXp4mkgOy4KD4hpuXXpcuuqNXvwRqBiD4wjH/IG+u6vmTvQ==",
+  "dgSpecHash": "NY21R/V/jRaLoQ+/0rxofT+GGxLV97+BGQo8qaLtL3iL61qoTw3BxbRI4ggFzJflPUvR56q3CIcs/ViM48zxIw==",
   "success": true,
   "projectFilePath": "C:\\Users\\huy_x\\source\\repos\\VinderenApi\\VinderenApi.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\huy_x\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
+    "C:\\Users\\huy_x\\.nuget\\packages\\markdig\\0.33.0\\markdig.0.33.0.nupkg.sha512",
     "C:\\Users\\huy_x\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\6.0.21\\microsoft.aspnetcore.authentication.jwtbearer.6.0.21.nupkg.sha512",
     "C:\\Users\\huy_x\\.nuget\\packages\\microsoft.aspnetcore.cryptography.internal\\6.0.21\\microsoft.aspnetcore.cryptography.internal.6.0.21.nupkg.sha512",
     "C:\\Users\\huy_x\\.nuget\\packages\\microsoft.aspnetcore.cryptography.keyderivation\\6.0.21\\microsoft.aspnetcore.cryptography.keyderivation.6.0.21.nupkg.sha512",

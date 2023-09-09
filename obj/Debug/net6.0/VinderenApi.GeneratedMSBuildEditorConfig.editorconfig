@@ -15,3 +15,27 @@ build_property.SupportLocalizedComponentNames =
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
 build_property.MSBuildProjectDirectory = C:\Users\huy_x\source\repos\VinderenApi
 build_property._RazorSourceGeneratorDebug = 
+
+[C:/Users/huy_x/source/repos/VinderenApi/Pages/Authentication/AddAuthentication.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQXV0aGVudGljYXRpb25cQWRkQXV0aGVudGljYXRpb24uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/huy_x/source/repos/VinderenApi/Pages/Authentication/JWTandAuthentication.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQXV0aGVudGljYXRpb25cSldUYW5kQXV0aGVudGljYXRpb24uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/huy_x/source/repos/VinderenApi/Pages/Authentication/JWTIssuerAndAudience.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQXV0aGVudGljYXRpb25cSldUSXNzdWVyQW5kQXVkaWVuY2UuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/huy_x/source/repos/VinderenApi/Pages/Documentation.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRG9jdW1lbnRhdGlvbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/huy_x/source/repos/VinderenApi/Pages/MVC/MVCattribute.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTVZDXE1WQ2F0dHJpYnV0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/huy_x/source/repos/VinderenApi/Pages/MVC/TaskIActionResult.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTVZDXFRhc2tJQWN0aW9uUmVzdWx0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 

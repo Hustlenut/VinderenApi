@@ -24,10 +24,17 @@ builder.Services.AddCors(
 
 // Add services to the container.
 
+//Razor pages
+builder.Services.AddRazorPages()
+    .AddRazorPagesOptions(options =>
+    {
+        options.Conventions.AddPageRoute("/", "/Pages");
+    });
+
 // Adding IdentityDbContext
 // Get the secret connection string before declaring the var.
 builder.Configuration.AddUserSecrets<Program>();
-
+// For development:
 var dbConn = builder.Configuration["Secret:SmarterASPNET"];
 
 builder.Services.AddDbContext<EntityContext>(options =>
@@ -35,8 +42,14 @@ builder.Services.AddDbContext<EntityContext>(options =>
     options.UseSqlServer(dbConn); //builder.Configuration.GetConnectionString() gets the string from appsettings.
     options.UseLoggerFactory(LoggerFactory.Create(builder => builder.AddDebug()));
 });
+
+//TODO: Need to configure secret for production pipeline...
+
 // Create a singleton from a secret value to later generate a JWT token...
 var jwtConfigValue = builder.Configuration["Secret2:JwtConfig"];
+
+//TODO: Need to configure secret2 for production pipeline...
+
 var jwtConfig = new JwtConfig
 {
     Secret = jwtConfigValue
@@ -52,16 +65,17 @@ builder.Services.AddAuthentication(options =>
 })
     .AddJwtBearer(jwt =>
     {
-        var key = Encoding.ASCII.GetBytes(jwtConfig.Secret);
+        var key = Encoding.ASCII.GetBytes(jwtConfig.Secret); // Upon receiving the token back from the client, this specifies where the "authorizer" should be comparing.
 
         jwt.SaveToken = true;
+        // These parameters ensures that the token is validated correctly by intercepting the http requests
         jwt.TokenValidationParameters = new TokenValidationParameters()
         {
             ValidateIssuerSigningKey = true,
             IssuerSigningKey = new SymmetricSecurityKey(key),
-            ValidateIssuer = true, //remember to switch to true in production...
-            ValidateAudience = true, //remember to switch to true in production...
-            RequireExpirationTime = false, //remember to switch to true in production, check out refresh token.
+            ValidateIssuer = true, //if true, an issuer is generally the host server for (this) API
+            ValidateAudience = true, // if true, validates the expected receiver 
+            RequireExpirationTime = false, 
             ValidateLifetime = true
         };
     });
@@ -97,5 +111,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapRazorPages();
 
 app.Run();

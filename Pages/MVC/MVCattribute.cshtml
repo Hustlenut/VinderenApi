@@ -1,0 +1,40 @@
+﻿@page
+@model VinderenApi.Pages.MVC.MVCattributeModel
+@{
+	<h3>MVC Attribute [FromBody] and use of DTO</h3>
+	<pre>
+	The [FromBody] attribute in ASP.NET Core MVC is used to indicate that the parameters of an action method should be 
+	bound from the request body of an HTTP request. In your example, you have the following action method signature:
+
+	"public async Task&lt;IActionResult&gt; Register([FromBody] UserRegRequestDto requestDto)"
+
+	Let's break down what this does:
+
+	public async Task&lt;IActionResult&gt; Register: This is a controller action method that will be executed when a request 
+	is made to the corresponding route.
+
+	[FromBody]: This attribute specifies that the requestDto parameter should be populated by binding data from the 
+	request body.
+
+	UserRegRequestDto requestDto: This is the parameter of the action method. It's of type UserRegRequestDto, which is a 
+	data transfer object (DTO) representing the data you expect to receive from the client when registering a user.
+
+	By using [FromBody] before the UserRegRequestDto parameter, you're indicating that the values of the properties within 
+	UserRegRequestDto should be extracted from the request body. This is typically used when you're sending data in JSON 
+	or XML format in the request body of an HTTP POST or PUT request.
+
+	For example, if you're sending a JSON request like this:
+
+	{
+		"username": "john_doe",
+		"password": "secret123",
+		// other properties
+	}
+
+	The [FromBody] attribute ensures that the JSON properties are properly mapped to the properties of the UserRegRequestDto 
+	object, allowing you to access and work with the data sent by the client.
+
+	In summary, the [FromBody] attribute is a way to tell ASP.NET Core to deserialize the request body and populate the 
+	corresponding parameter of your action method with the deserialized data.
+	</pre>
+}
