@@ -160,10 +160,10 @@ namespace VinderenApi.Controllers
             var key = _jwtConfig?.Secret != null ? Encoding.UTF8.GetBytes(_jwtConfig.Secret) : null;
             //var key = Encoding.UTF8.GetBytes(_configuration.GetSection("JwtConfig:Secret").Value);
 
-            //Token descriptor, is going to allow us to put the configurations needed inside the token.
+            //Token descriptor is describing the payload, which is going to allow us to put the configurations needed inside the token.
             var tokenDescriptor = new SecurityTokenDescriptor()
             {
-                Subject = new ClaimsIdentity(new[]
+                Subject = new ClaimsIdentity(new[] 
                 {
                     new Claim("Id", user.Id), //Claims the "Id" as user.Id which is a property of IdentityUser.
                     new Claim(JwtRegisteredClaimNames.Sub, user.Email),

@@ -1,0 +1,36 @@
+﻿@page
+@model VinderenApi.Pages.Authentication.JwtRegisteredClaimNamesModel
+@{
+	<h3>JwtRegisteredClaimNames</h3>
+	<pre>
+	JwtRegisteredClaimNames is a class provided by the System.IdentityModel.Tokens.Jwt namespace in .NET. 
+	It defines a set of strings representing the names of registered claims in a JSON Web Token (JWT). 
+	JWTs are a compact, URL-safe means of representing claims to be transferred between two parties.
+
+	In a JWT, claims are used to represent statements about an entity (typically, the user) and additional data. 
+	The registered claims defined in JwtRegisteredClaimNames are standardized claims that have well-known meanings 
+	and are commonly used in JWTs. These claims include:
+
+	Sub (Subject): Typically used to store the subject of the JWT, which is often the user ID or some unique identifier.
+
+	Jti (JWT ID): A unique identifier for the JWT. It can be used to prevent the JWT from being replayed.
+
+	Iat (Issued At): The timestamp when the JWT was issued.
+
+	Exp (Expiration Time): The timestamp indicating when the JWT should expire. After this time, the token should no longer be considered valid.
+
+	Nbf (Not Before): The timestamp indicating the earliest time the JWT should be considered valid.
+
+	Iss (Issuer): The entity that issued the JWT. It's often the server or authority that generated the token.
+
+	Aud (Audience): The intended recipient of the JWT. It typically specifies the audience for which the token is intended.
+
+	These registered claims provide a standardized way to include common pieces of information in a JWT. 
+	For example, JwtRegisteredClaimNames.Sub is often used to store the user's identifier, 
+	and JwtRegisteredClaimNames.Exp is used to specify when the token should expire.
+
+	In the project, these registered claims are used when generating a JWT token for authentication and authorization purposes. 
+	By including these claims in the JWT payload, you provide information about the user and the token itself, 
+	allowing your application to make authorization decisions and validate the token's integrity.
+	</pre>
+}

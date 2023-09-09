@@ -1,0 +1,64 @@
+﻿@page
+@model VinderenApi.Pages.Authentication.CryptoTermDifferencesModel
+@{
+	<h3>Crypto Terms Differences</h3>
+	<pre>
+	Encryption: Encryption typically involves transforming data into a format that is not easily readable, 
+	and it requires a key to both encrypt and decrypt the data. The goal of encryption is to protect data confidentiality.
+
+	Encoding: Encoding, like base64 encoding, is a reversible transformation of data from one format to another. 
+	Encoding does not provide security; it simply represents data in a different form, and it can be easily decoded.
+
+	The process of creating a cryptographic signature for a JWT is more about ensuring the integrity and authenticity 
+	of the token rather than encrypting its contents. It allows the recipient to verify that the token hasn't been tampered 
+	with and was issued by a trusted party (the server).
+
+	UUID (Universally Unique Identifier):'
+	UUIDs are primarily used to generate unique identifiers without the need for a centralized authority. 
+	They are often used in distributed systems and databases to ensure uniqueness of data across different nodes or systems.
+		The main purpose of UUIDs is to guarantee uniqueness, but they don't necessarily prove the authenticity or integrity of data. 
+		Two different sets of data can have the same UUID.
+			Uniqueness Within a Context: UUIDs are generated to be unique within a specific scope or context. 
+			For example, within a single system or application, UUIDs are highly likely to be unique. This uniqueness is 
+			achieved by combining various factors like timestamps, random numbers, and network addresses.
+
+	Example key differences:
+
+	Encryption:
+
+	Encryption is a two-way process. Data can be encrypted (converted into a secure, unreadable format) and then decrypted 
+	(converted back into its original format) using a secret key.
+	The goal of encryption is to protect the confidentiality of data, ensuring that only authorized parties can access the 
+	original data after decryption.
+	If someone has the encrypted data and the secret key, they can decrypt it to obtain the original content.
+	JWT Signature:
+
+	The JWT signature 
+	
+	is created using a one-way process called HMAC (Hash-based Message Authentication Code).
+	HMAC is used to ensure the integrity and authenticity of data but does not provide confidentiality. 
+	It does not hide or protect the content of the JWT.
+	The signature is a fixed-length hash generated from the header, payload, and a secret key.
+	The signature is used to verify that the JWT has not been tampered with during transit. 
+	It proves that the token was created by someone with access to the secret key.
+	The secret key is never revealed or exposed during this process. It's securely stored on the server 
+	and used only for signature verification.
+	In summary, while encryption focuses on confidentiality and two-way transformation, 
+	the JWT signature process primarily focuses on data integrity and authenticity. 
+	It's a one-way process that ensures data hasn't been altered in transit but doesn't hide the content itself.
+
+	In short:
+	
+	HMACSHA256(
+	  base64UrlEncode(header) + "." +
+	  base64UrlEncode(payload),
+	  secret)
+
+	The result is "irreversible" but if you have the same ingredients, you can recreate the signature and
+	see if it the same. This ensures the integrity of the data. base64Url encoding uses different sets 
+	of characters to ensure URL safety.
+
+	If you decode the JWT token, you will see that the payload has information in UUID. This contributes
+	to the uniqueness of the JWT signature. This is configured with the "Claims" in the GenerateJwtToken() method.
+	</pre>
+}

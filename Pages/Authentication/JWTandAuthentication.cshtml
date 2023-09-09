@@ -60,7 +60,8 @@
         return jwtToken;
     }
     
-    This method generates a JWT token based on the user's identity and includes claims, expiration, and signing. 
+    This method generates a JWT token based on the user's identity and includes claims 
+    (mapping IdentityUser properties to JwtRegisteredClaimNames), expiration, and signing. 
     This token is returned to the client upon successful registration or login.
 
     <h4>Protecting Routes:</h4>

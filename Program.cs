@@ -79,7 +79,8 @@ builder.Services.AddAuthentication(options =>
             ValidateLifetime = true
         };
     });
-
+//Configures the usage of Identity Core.
+//Essensially connects and configures the EntityContext to the tables like AspNetUser and AspNetRoles in the database.
 builder.Services.AddIdentityCore<IdentityUser>(options =>
 {
     options.SignIn.RequireConfirmedAccount = false;

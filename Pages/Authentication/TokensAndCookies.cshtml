@@ -1,0 +1,58 @@
+﻿@page
+@model VinderenApi.Pages.Authentication.TokensAndCookiesModel
+@{
+	<h3>Tokens and Cookies</h3>
+	<pre>
+	JWT Token, Bearer Token, and Cookies are all mechanisms used for authentication and authorization, 
+	but they differ in their underlying technology and how they are used. Here's a brief overview of each:
+
+	<h4>JWT Token (JSON Web Token):</h4>
+
+	Technology: JWT is a compact, URL-safe means of representing claims to be transferred between two parties. 
+	It is a JSON object that is signed with a secret key or a public/private key pair.
+
+	Usage: JWT tokens are often used in modern web applications and APIs to securely transmit information between 
+	the client and server. They are commonly used for authentication and authorization. Once a user logs in, 
+	they receive a JWT token containing their claims (e.g., user ID, role) that can be included in subsequent 
+	requests to the server. The server can verify and decode the token to identify the user and grant or deny 
+	access to resources.
+
+	<h4>Bearer Token:</h4>
+
+	Technology: A bearer token is a type of access token. It can be a JWT token, but it can also be a simple string 
+	or any other format. The term "bearer" means that whoever possesses the token is granted access, without requiring 
+	any additional proof of identity.
+
+	Usage: Bearer tokens are commonly used in API authentication. When a client (e.g., a web application or a mobile app) 
+	makes a request to an API, it includes the bearer token in the request's Authorization header. The API server validates 
+	the token to determine if the request is authorized.
+
+	<h4>Cookie:</h4>
+
+	Technology: A cookie is a small piece of data sent from a web server and stored in a user's web browser. 
+	Cookies can be both server-side and client-side.
+
+	Usage: Cookies are often used for session management and user authentication in web applications. When a 
+	user logs in, a session cookie is created and stored in their browser. This cookie typically contains a 
+	session ID or a reference to the user's session data on the server. With each subsequent request, the browser 
+	sends the session cookie back to the server, allowing the server to identify the user and maintain their session.
+
+	Here are some key differences between the three:
+
+	Technology: JWT tokens are a specific format of tokens, whereas bearer tokens can be of various formats, 
+	including JWT. Cookies, on the other hand, are small pieces of data stored in the user's browser.
+
+	Transport: JWT tokens and bearer tokens are typically transmitted as part of the request header, while 
+	cookies are automatically included in the HTTP request headers by the browser.
+
+	Security: JWT tokens and bearer tokens can be used securely if implemented correctly, with proper validation 
+	and token management. Cookies are also secure when used with secure and HTTP-only attributes, but they can be 
+	vulnerable to cross-site scripting (XSS) attacks if not handled carefully.
+
+	Stateless vs. Stateful: JWT tokens and bearer tokens are often stateless, meaning the server does not need to 
+	maintain session state. Cookies are stateful and require server-side storage to manage sessions.
+
+	In summary, the choice between JWT tokens, bearer tokens, or cookies depends on the specific requirements of your 
+	application, security considerations, and architectural choices. Each has its own advantages and trade-offs.
+	</pre>
+}

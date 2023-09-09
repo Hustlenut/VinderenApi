@@ -20,12 +20,32 @@ build_property._RazorSourceGeneratorDebug =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQXV0aGVudGljYXRpb25cQWRkQXV0aGVudGljYXRpb24uY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/huy_x/source/repos/VinderenApi/Pages/Authentication/CryptoTermDifferences.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQXV0aGVudGljYXRpb25cQ3J5cHRvVGVybURpZmZlcmVuY2VzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/huy_x/source/repos/VinderenApi/Pages/Authentication/ImplementationOfIdentityCore.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQXV0aGVudGljYXRpb25cSW1wbGVtZW50YXRpb25PZklkZW50aXR5Q29yZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/huy_x/source/repos/VinderenApi/Pages/Authentication/JWTandAuthentication.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQXV0aGVudGljYXRpb25cSldUYW5kQXV0aGVudGljYXRpb24uY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/huy_x/source/repos/VinderenApi/Pages/Authentication/JWTIssuerAndAudience.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQXV0aGVudGljYXRpb25cSldUSXNzdWVyQW5kQXVkaWVuY2UuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/huy_x/source/repos/VinderenApi/Pages/Authentication/JwtRegisteredClaimNames.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQXV0aGVudGljYXRpb25cSnd0UmVnaXN0ZXJlZENsYWltTmFtZXMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/huy_x/source/repos/VinderenApi/Pages/Authentication/TechnicalOverviewOfJWTusage.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQXV0aGVudGljYXRpb25cVGVjaG5pY2FsT3ZlcnZpZXdPZkpXVHVzYWdlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/huy_x/source/repos/VinderenApi/Pages/Authentication/TokensAndCookies.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQXV0aGVudGljYXRpb25cVG9rZW5zQW5kQ29va2llcy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/huy_x/source/repos/VinderenApi/Pages/Documentation.cshtml]
