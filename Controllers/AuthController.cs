@@ -175,8 +175,14 @@ namespace VinderenApi.Controllers
                 Expires = DateTime.Now.AddHours(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256)
             };
-
+			/* Following method is used to create a JwtSecurityToken object, which represents the JWT. 
+			 * Providing the necessary information for the JWT, such as claims, expiration, issuer, audience, and signing credentials. 
+			 * It constructs the token in memory but doesn't encode or sign it. It's like preparing the content of the JWT.*/
             var token = jwtTokenHandler.CreateToken(tokenDescriptor);
+			/* Following method is used to take the JwtSecurityToken created with CreateToken() and serialize it into a string that 
+			 * represents a JWT in the compact serialization format. This includes encoding the header and payload as Base64Url 
+			 * strings and signing them with the specified signing algorithm and key. It produces the final JWT string that you 
+			 * can use for authentication and authorization purposes.*/
             var jwtToken = jwtTokenHandler.WriteToken(token);
 
             return jwtToken;

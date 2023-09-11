@@ -1,19 +1,21 @@
 ﻿@page
 @model VinderenApi.Pages.Authentication.CryptoTermDifferencesModel
 @{
-	<h3>Crypto Terms Differences</h3>
+	<h3>Cryptographic Term Differences</h3>
 	<pre>
-	Encryption: Encryption typically involves transforming data into a format that is not easily readable, 
+	<h4>Encryption:</h4>
+	Encryption typically involves transforming data into a format that is not easily readable, 
 	and it requires a key to both encrypt and decrypt the data. The goal of encryption is to protect data confidentiality.
 
-	Encoding: Encoding, like base64 encoding, is a reversible transformation of data from one format to another. 
+	<h4>Encoding:</h4>
+	Encoding, like base64 encoding, is a reversible transformation of data from one format to another. 
 	Encoding does not provide security; it simply represents data in a different form, and it can be easily decoded.
 
 	The process of creating a cryptographic signature for a JWT is more about ensuring the integrity and authenticity 
 	of the token rather than encrypting its contents. It allows the recipient to verify that the token hasn't been tampered 
 	with and was issued by a trusted party (the server).
 
-	UUID (Universally Unique Identifier):'
+	<h4>UUID/GUID (Universally/Globally Unique Identifier):</h4>
 	UUIDs are primarily used to generate unique identifiers without the need for a centralized authority. 
 	They are often used in distributed systems and databases to ensure uniqueness of data across different nodes or systems.
 		The main purpose of UUIDs is to guarantee uniqueness, but they don't necessarily prove the authenticity or integrity of data. 
@@ -21,8 +23,9 @@
 			Uniqueness Within a Context: UUIDs are generated to be unique within a specific scope or context. 
 			For example, within a single system or application, UUIDs are highly likely to be unique. This uniqueness is 
 			achieved by combining various factors like timestamps, random numbers, and network addresses.
+				This will in turn minimize the chances of collisions.
 
-	Example key differences:
+	<h5>Example key differences:</h5>
 
 	Encryption:
 
