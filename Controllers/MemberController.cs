@@ -34,6 +34,15 @@ namespace VinderenApi.Controllers
 			return Ok(roles);
 		}
 
+		[HttpGet]
+		[Route("GetAllUsers")]
+		public IActionResult GetAllUsers()
+		{
+			var users = _userManager.Users.ToList();
+
+			return Ok(users);
+		}
+
 		[HttpPost]
 		[Route("CreateRole")]
 		public async Task<IActionResult> CreateRole(string name)
@@ -183,5 +192,39 @@ namespace VinderenApi.Controllers
 				});
 			}
 		}
+
+		[HttpPost]
+		[Route("DeleteUser")]
+		public async Task<IActionResult> DeleteUser(string email)
+		{
+			//Check if user exist
+			var user = await _userManager.FindByEmailAsync(email);
+
+			if (user == null)
+			{
+				_logger.LogInformation($"The user with email: {email} does not exist");
+				return BadRequest(new
+				{
+					error = "User does not exist"
+				});
+			}
+			
+			var result = await _userManager.DeleteAsync(user);
+
+			if (result.Succeeded)
+			{
+				return Ok(new
+				{
+					result = $"The User {email} has been deleted successfully."
+				});
+			}else
+			{
+				return BadRequest(new
+				{
+					error = $"Unable to delete User: {email}"
+				});
+			}
+		}
+
 	}
 }

@@ -68,7 +68,7 @@ namespace VinderenApi.Controllers
                     Email = requestDto.Email,
                     UserName = requestDto.Email
                 };
-
+                
                 var is_created = await _userManager.CreateAsync(new_user, requestDto.Password);
 
                 if (is_created.Succeeded)
