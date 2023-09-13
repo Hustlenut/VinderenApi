@@ -40,7 +40,7 @@ var dbConn = builder.Configuration["Secret:SmarterASPNET"];
 builder.Services.AddDbContext<EntityContext>(options =>
 {
     options.UseSqlServer(dbConn); //builder.Configuration.GetConnectionString() gets the string from appsettings.
-    options.UseLoggerFactory(LoggerFactory.Create(builder => builder.AddDebug()));
+    options.UseLoggerFactory(LoggerFactory.Create(builder => builder.AddDebug())); //To log DB interactions in EF Core, like "SaveChanges()"
 });
 
 //TODO: Need to configure secret for production pipeline...
