@@ -17,19 +17,26 @@ namespace VinderenApi.Controllers
     public class AuthController : ControllerBase
     {
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly JwtConfig _jwtConfig;
         // private readonly IConfiguration _configuration;
         private readonly DbContextOptions<EntityContext> _identityDbContextOptions;
+        private readonly ILogger<AuthController> _logger;
+        
 
         public AuthController(UserManager<IdentityUser> userManager,
+            RoleManager<IdentityRole> roleManager,
             JwtConfig jwtConfig,
             //IConfiguration configuration,
-            DbContextOptions<EntityContext> identityDbContextOptions)
+            DbContextOptions<EntityContext> identityDbContextOptions,
+            ILogger<AuthController> logger)
         {
             _userManager = userManager;
+            _roleManager = roleManager;
             _jwtConfig = jwtConfig;
             //_configuration = configuration;
             _identityDbContextOptions = identityDbContextOptions;
+            _logger = logger;
 
         }
 
@@ -188,7 +195,5 @@ namespace VinderenApi.Controllers
             return jwtToken;
 
         }
-
-
     }
 }
