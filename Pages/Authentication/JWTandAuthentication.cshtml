@@ -1,0 +1,160 @@
+﻿@page
+@model VinderenApi.Pages.Authentication.JWTandAuthenticationModel
+@{
+	<h3>JWT and Authentication</h3>
+	<pre>
+    When a client sends an HTTP request with a valid token, ASP.NET Core authenticates and authorizes the request 
+    using the configured authentication middleware and policies. 
+    Let's go through the process step by step:
+
+    Authentication Middleware Setup:
+
+    In Program.cs, authentication middleware is set up using the AddAuthentication and AddJwtBearer methods:
+
+    builder.Services.AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
+    .AddJwtBearer(jwt =>
+    {
+        // ...
+    });
+   
+    This code configures the application to use JWT Bearer Authentication as the default authentication scheme. 
+    It specifies how incoming JWT tokens will be validated.
+
+    <h4>Authorization Policies:</h4>
+
+    In ASP.NET Core, one can define authorization policies to control access to your controllers and actions. 
+    For example, if you want to restrict access to certain controllers or actions to authenticated users, 
+    you can apply an [Authorize] attribute:
+
+    [Authorize]
+    [Route("api/secure")]
+    public class SecureController : ControllerBase
+    {
+        // ...
+    }
+    
+    The [Authorize] attribute indicates that only authenticated users can access the actions within this controller.
+
+    <h4>JWT Token Validation:</h4>
+
+    In AuthController.cs, method GenerateJwtToken() creates JWT tokens:
+
+    private string GenerateJwtToken(IdentityUser user)
+    {
+        var jwtTokenHandler = new JwtSecurityTokenHandler();
+        var key = _jwtConfig?.Secret != null ? Encoding.UTF8.GetBytes(_jwtConfig.Secret) : null;
+
+        var tokenDescriptor = new SecurityTokenDescriptor()
+        {
+            // ...
+        };
+
+        var token = jwtTokenHandler.CreateToken(tokenDescriptor);
+        var jwtToken = jwtTokenHandler.WriteToken(token);
+
+        return jwtToken;
+    }
+    
+    This method generates a JWT token based on the user's identity and includes claims 
+    (mapping IdentityUser properties to JwtRegisteredClaimNames), expiration, and signing. 
+    This token is returned to the client upon successful registration or login.
+
+    <h4>Protecting Routes:</h4>
+
+    To protect specific routes or controllers, apply the [Authorize] attribute (works with different scopes as well):
+
+    [Route("api/auth/[controller]")]
+    public class AuthController : ControllerBase
+    {
+        // ...
+
+        [Authorize] // Requires authentication to access this action
+        [Route("SecureResource")]
+        public IActionResult SecureResource()
+        {
+            // This action can only be accessed by authenticated users
+            // ...
+        }
+    }
+    
+    
+    When a client sends a request to the SecureResource action, the [Authorize] attribute ensures that the request is 
+    only processed if it includes a valid JWT token in the Authorization header.
+
+    <h4>Custom Policies:</h4>
+
+    In more complex scenarios, you might need custom authorization policies that involve checking specific claims or roles. 
+    You can define custom policies in your startup configuration and apply them to controllers or actions as needed.
+
+    Here's an example of how you can define and use a custom policy:
+
+    // Define a custom authorization policy.
+    services.AddAuthorization(options =>
+    {
+        options.AddPolicy("RequireAdminRole", policy =>
+        {
+            policy.RequireAuthenticatedUser();
+            policy.RequireRole("Admin");
+        });
+    });
+
+    
+    // Apply the custom policy to a controller or action.
+    
+    [ApiController]
+    [Route("api/admin")]
+    [Authorize(Policy = "RequireAdminRole")] // Requires authenticated users with "Admin" role.
+    public class AdminController : ControllerBase
+    {
+        [HttpGet]
+        public IActionResult Get()
+        {
+            // This action is only accessible to authenticated users with the "Admin" role.
+        }
+
+        // Other action methods...
+    }
+    
+    
+    By using the [Authorize] attribute and custom policies, you can easily control access to your controllers and 
+    actions based on authentication and authorization requirements. Users who are not authenticated will 
+    receive a 401 Unauthorized response when trying to access protected resources.
+
+    <h4>JWT Token in Request:</h4>
+
+    To include the JWT token in the client's request, the token should be added to the request's Authorization header with 
+    the "Bearer" scheme:
+
+    GET /api/auth/secureresource
+    Host: your-api-host.com
+    Authorization: Bearer your-jwt-token-here
+    
+    
+    <h4>JWT Token Validation Middleware:</h4>
+
+    ASP.NET Core's authentication middleware, configured earlier, intercepts the incoming request. 
+    It looks for the JWT token in the Authorization header and validates it using the options you specified 
+    during setup, such as the key and validation parameters.
+
+    <h4>Authentication and Authorization:</h4>
+
+    If the token is valid and hasn't expired, the authentication middleware sets the user's identity based on the
+    claims in the token. The [Authorize] attribute applied to your controllers and actions checks whether the user 
+    is authenticated and authorized to access the requested resource. If the token is invalid or has expired, 
+    the middleware rejects the request.
+
+    <h4>Handling Authentication and Authorization Errors:</h4>
+
+    You can customize error handling and responses for authentication and authorization failures. 
+
+    That's the general flow of how authentication and authorization work in this ASP.NET Core application with JWT tokens. 
+    The key components are the authentication middleware, JWT token generation, and the [Authorize] attribute applied to 
+    controllers and actions. When a client sends a request with a valid token, ASP.NET Core automatically handles the 
+    authentication and authorization checks for you.
+	</pre>
+}

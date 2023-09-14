@@ -1,0 +1,34 @@
+﻿@page
+@model VinderenApi.Pages.Authentication.JWTIssuerAndAudienceModel
+@{
+	<h3>JWT - Issuer and Audience</h3>
+	<pre>
+	Issuer (iss): The issuer is the entity that issues (creates and signs) the JWT. It typically represents the identity of 
+	the server or service that's generating the token. It is often a URL or identifier associated with the authentication server. 
+	The issuer is a way to verify the authenticity of the token.
+
+	Audience (aud): The audience represents the recipient of the JWT. It specifies who the token is intended for. 
+	The audience can be the client application that is expected to consume the token. By specifying the audience, 
+	you ensure that the token is only accepted by the intended audience.
+
+	So, in JWT validation:
+
+	Issuer Validation: You check that the "iss" claim in the token matches the expected issuer. 
+	This ensures that the token was issued by a trusted authority.
+
+	Audience Validation: You check that the "aud" claim in the token matches the expected audience. 
+	This ensures that the token is intended for your application and not for some other recipient.
+
+	Here's a simplified example:
+
+	Suppose you have a server (your API) that issues JWTs for client applications. In this case:
+
+	The "iss" claim in the JWT would be the identity of your server (e.g., the URL of your authentication server).
+	The "aud" claim would be the identifier of the client application that the token is intended for.
+	By validating these claims, you can ensure that the token was issued by your server and is intended for a specific 
+	client application. This helps prevent misuse of tokens by unauthorized parties.
+
+	In practice, you configure your authentication system to validate these claims to ensure the security and integrity 
+	of your JWT-based authentication.
+	</pre>
+}

@@ -15,3 +15,51 @@ build_property.SupportLocalizedComponentNames =
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
 build_property.MSBuildProjectDirectory = C:\Users\huy_x\source\repos\VinderenApi
 build_property._RazorSourceGeneratorDebug = 
+
+[C:/Users/huy_x/source/repos/VinderenApi/Pages/Authentication/AddAuthentication.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQXV0aGVudGljYXRpb25cQWRkQXV0aGVudGljYXRpb24uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/huy_x/source/repos/VinderenApi/Pages/Authentication/CryptoTermDifferences.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQXV0aGVudGljYXRpb25cQ3J5cHRvVGVybURpZmZlcmVuY2VzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/huy_x/source/repos/VinderenApi/Pages/Authentication/ImplementationOfIdentityCore.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQXV0aGVudGljYXRpb25cSW1wbGVtZW50YXRpb25PZklkZW50aXR5Q29yZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/huy_x/source/repos/VinderenApi/Pages/Authentication/JWTandAuthentication.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQXV0aGVudGljYXRpb25cSldUYW5kQXV0aGVudGljYXRpb24uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/huy_x/source/repos/VinderenApi/Pages/Authentication/JWTIssuerAndAudience.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQXV0aGVudGljYXRpb25cSldUSXNzdWVyQW5kQXVkaWVuY2UuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/huy_x/source/repos/VinderenApi/Pages/Authentication/JwtRegisteredClaimNames.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQXV0aGVudGljYXRpb25cSnd0UmVnaXN0ZXJlZENsYWltTmFtZXMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/huy_x/source/repos/VinderenApi/Pages/Authentication/TechnicalOverviewOfJWTusage.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQXV0aGVudGljYXRpb25cVGVjaG5pY2FsT3ZlcnZpZXdPZkpXVHVzYWdlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/huy_x/source/repos/VinderenApi/Pages/Authentication/TokensAndCookies.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQXV0aGVudGljYXRpb25cVG9rZW5zQW5kQ29va2llcy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/huy_x/source/repos/VinderenApi/Pages/Documentation.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRG9jdW1lbnRhdGlvbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/huy_x/source/repos/VinderenApi/Pages/Misc/HttpResponseCode.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTWlzY1xIdHRwUmVzcG9uc2VDb2RlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/huy_x/source/repos/VinderenApi/Pages/MVC/MVCattribute.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTVZDXE1WQ2F0dHJpYnV0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/huy_x/source/repos/VinderenApi/Pages/MVC/TaskIActionResult.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTVZDXFRhc2tJQWN0aW9uUmVzdWx0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
