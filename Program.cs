@@ -66,16 +66,16 @@ builder.Services.AddAuthentication(options =>
     .AddJwtBearer(jwt =>
     {
         var key = Encoding.ASCII.GetBytes(jwtConfig.Secret); // Upon receiving the token back from the client, this specifies where the "authorizer" should be comparing.
-
+        
         jwt.RequireHttpsMetadata = false;
         jwt.SaveToken = true;
         // These parameters ensures that the token is validated correctly by intercepting the http requests
         jwt.TokenValidationParameters = new TokenValidationParameters()
         {
-			RoleClaimType = "role",
-			ValidateIssuerSigningKey = true,
+			//RoleClaimType = "role",
 			ValidAlgorithms = new List<string> { SecurityAlgorithms.HmacSha256 },
-			IssuerSigningKey = new SymmetricSecurityKey(key), 
+			IssuerSigningKey = new SymmetricSecurityKey(key),
+			ValidateIssuerSigningKey = true,
             ValidateIssuer = false, //if true, an issuer is generally the host server for (this) API
             ValidateAudience = false, // if true, validates the expected receiver 
             RequireExpirationTime = false, 
@@ -91,7 +91,6 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 {
     options.SignIn.RequireConfirmedAccount = false;
 })
-//.AddEntityFrameworkStores<IdentityEntity>();
 .AddRoles<IdentityRole>()
 .AddUserStore<UserStore<IdentityUser, IdentityRole, EntityContext, string>>()
 .AddRoleStore<RoleStore<IdentityRole, EntityContext, string>>()
