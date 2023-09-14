@@ -67,18 +67,24 @@ builder.Services.AddAuthentication(options =>
     {
         var key = Encoding.ASCII.GetBytes(jwtConfig.Secret); // Upon receiving the token back from the client, this specifies where the "authorizer" should be comparing.
 
+        jwt.RequireHttpsMetadata = false;
         jwt.SaveToken = true;
         // These parameters ensures that the token is validated correctly by intercepting the http requests
         jwt.TokenValidationParameters = new TokenValidationParameters()
         {
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(key),
-            ValidateIssuer = true, //if true, an issuer is generally the host server for (this) API
-            ValidateAudience = true, // if true, validates the expected receiver 
+			RoleClaimType = "role",
+			ValidateIssuerSigningKey = true,
+			ValidAlgorithms = new List<string> { SecurityAlgorithms.HmacSha256 },
+			IssuerSigningKey = new SymmetricSecurityKey(key), 
+            ValidateIssuer = false, //if true, an issuer is generally the host server for (this) API
+            ValidateAudience = false, // if true, validates the expected receiver 
             RequireExpirationTime = false, 
             ValidateLifetime = true
-        };
+		};
     });
+
+builder.Services.AddAuthorization();
+
 //Configures the usage of Identity.
 //Essensially connects and configures the EntityContext to the tables like AspNetUser and AspNetRoles in the database.
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
@@ -108,6 +114,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

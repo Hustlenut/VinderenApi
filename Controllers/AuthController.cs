@@ -10,6 +10,7 @@ using VinderenApi.DbContext;
 using VinderenApi.Models.DTO;
 using VinderenApi.Authentication;
 using VinderenApi.Configurations;
+using Microsoft.AspNetCore.Authorization;
 
 namespace VinderenApi.Controllers
 {
@@ -39,7 +40,7 @@ namespace VinderenApi.Controllers
             _logger = logger;
 
         }
-
+        
         [HttpPost]
         [Route("Register")]
         public async Task<IActionResult> Register([FromBody] UserRegistrationRequestDto requestDto) //[FromBody] means that it has to read from the body of the HTTP request
@@ -198,8 +199,9 @@ namespace VinderenApi.Controllers
 		{
 			var claims = new ClaimsIdentity(new[]
 {
-					new Claim("Id", user.Id), //Claims the "Id" as user.Id which is a property of IdentityUser.
-                    new Claim(JwtRegisteredClaimNames.Sub, user.Email),
+					//new Claim("id", user.Id), //Claims the "Id" as user.Id which is a property of IdentityUser.
+                    new Claim(ClaimTypes.NameIdentifier, user.Id),
+					new Claim(JwtRegisteredClaimNames.Sub, user.Email),
 					new Claim(JwtRegisteredClaimNames.Email, user.Email),
 					new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
 					new Claim(JwtRegisteredClaimNames.Iat, DateTime.Now.ToUniversalTime().ToString())
@@ -209,7 +211,7 @@ namespace VinderenApi.Controllers
 			var userRoles = await _userManager.GetRolesAsync(user); //Gets a list of user roles the user belongs to
 
 			/*The first loop adds a claim for each role the user belongs to, 
-			 * and the second loop adds any additional claims associated with each of those roles.*/
+			 * and the second loop adds any additional claims associated with each of those roles. In the case where a role can have additional claims*/
 			foreach (var userRole in userRoles)
 			{
 				claims.AddClaim(new Claim(ClaimTypes.Role, userRole)); //A new claim of type ClaimTypes.Role is added for each role in the list. This claim is added to the claims collection.

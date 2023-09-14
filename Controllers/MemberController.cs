@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using VinderenApi.Configurations;
@@ -6,7 +8,9 @@ using VinderenApi.DbContext;
 
 namespace VinderenApi.Controllers
 {
-	[Route("api/member/[controller]")]
+	[ApiController]
+	[Route("api/[controller]")]
+	[Authorize(Roles = "Admin")]
 	public class MemberController : AuthController
 	{
 		private readonly UserManager<IdentityUser> _userManager;
