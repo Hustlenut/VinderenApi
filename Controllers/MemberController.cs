@@ -8,7 +8,7 @@ using VinderenApi.DbContext;
 
 namespace VinderenApi.Controllers
 {
-	[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+	[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
 	[ApiController]
 	[Route("api/[controller]")]
 	public class MemberController : ControllerBase

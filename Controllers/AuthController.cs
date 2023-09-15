@@ -30,7 +30,8 @@ namespace VinderenApi.Controllers
             JwtConfig jwtConfig,
             //IConfiguration configuration,
             DbContextOptions<EntityContext> identityDbContextOptions,
-            ILogger<AuthController> logger)
+            ILogger<AuthController> logger
+            )
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -38,6 +39,7 @@ namespace VinderenApi.Controllers
             //_configuration = configuration;
             _identityDbContextOptions = identityDbContextOptions;
             _logger = logger;
+
 
         }
         
@@ -145,12 +147,27 @@ namespace VinderenApi.Controllers
                         },
                         Result = false
                     });
+				var jwtTokenHandler = new JwtSecurityTokenHandler();
 
-                var jwtToken = GenerateJwtToken(existing_user);
+				var claims = new List<Claim>
+				{
+					new Claim("user", existing_user.ToString())
+				};
 
-                return Ok(new AuthResult()
+				var jwtTokenDescr = JwtHelper.GetJwtToken(
+                    existing_user.ToString(),
+                    _jwtConfig.Secret,
+                    _jwtConfig.Issuer,
+                    _jwtConfig.Audience,
+                    2,
+                    claims.ToArray()
+                    );
+
+				var jwtToken = jwtTokenHandler.WriteToken(jwtTokenDescr);
+
+				return Ok(new AuthResult()
                 {
-                    Token = await jwtToken,
+                    Token = jwtToken,
                     Result = true
                 });
             }
@@ -178,7 +195,7 @@ namespace VinderenApi.Controllers
             {
                 Subject = await claims,
                 Expires = DateTime.Now.AddHours(1),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256)
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
 
 			/* Following method is used to create a JwtSecurityToken object, which represents the JWT. 

@@ -48,13 +48,17 @@ builder.Services.AddDbContext<EntityContext>(options =>
 //TODO: Need to configure secret for production pipeline...
 
 // Create a singleton from a secret value to later generate a JWT token...
-var jwtConfigValue = builder.Configuration["Secret2:JwtConfig"];
+var jwtConfigSecret = builder.Configuration["Secret2:JwtConfigSecret"];
+var jwtConfigIssuer = builder.Configuration["Secret3:JwtConfigIssuer"];
+var jwtConfigAudience = builder.Configuration["Secret4:JwtConfigAudience"];
 
 //TODO: Need to configure secret2 for production pipeline...
 
 var jwtConfig = new JwtConfig
 {
-    Secret = jwtConfigValue
+    Secret = jwtConfigSecret,
+    Issuer = jwtConfigIssuer,
+    Audience = jwtConfigAudience
 };
 
 builder.Services.AddSingleton(jwtConfig);
@@ -74,7 +78,7 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    //options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 })
     .AddJwtBearer(jwt =>
@@ -108,7 +112,7 @@ builder.Services.AddAuthentication(options =>
 		// These parameters ensures that the token is validated correctly by intercepting the http requests
 		jwt.TokenValidationParameters = new TokenValidationParameters()
         {
-			RoleClaimType = "role",
+            RoleClaimType = "role",
 			ValidAlgorithms = new List<string> { SecurityAlgorithms.HmacSha256 },
 			IssuerSigningKey = new SymmetricSecurityKey(key),
 			ValidateIssuerSigningKey = true,
@@ -119,7 +123,11 @@ builder.Services.AddAuthentication(options =>
 		};
     });
 
-builder.Services.AddAuthorization();
+builder.Services.AddAuthorization(options =>
+{
+	options.AddPolicy("RequireAdminRole", policy =>
+		policy.RequireRole("Admin"));
+});
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
