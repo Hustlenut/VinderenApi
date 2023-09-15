@@ -6,6 +6,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using VinderenApi.DbContext;
 using VinderenApi.Configurations;
+using Microsoft.AspNetCore.Hosting;
+using System.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
 //TODO: Provide secure policies
@@ -17,7 +19,7 @@ builder.Services.AddCors(
                 .AllowAnyHeader()
                 .AllowAnyOrigin()
                 .AllowAnyMethod()
-
+                .AllowCredentials()
         );
     }
 );
@@ -60,7 +62,7 @@ builder.Services.AddSingleton(jwtConfig);
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+    //options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 })
     .AddJwtBearer(jwt =>
@@ -69,17 +71,39 @@ builder.Services.AddAuthentication(options =>
         
         jwt.RequireHttpsMetadata = false;
         jwt.SaveToken = true;
-        // These parameters ensures that the token is validated correctly by intercepting the http requests
-        jwt.TokenValidationParameters = new TokenValidationParameters()
+
+		// Log token validation success
+		jwt.Events = new JwtBearerEvents
+		{
+			OnTokenValidated = context =>
+			{
+				// Create a logger for the JwtBearerEvents
+				var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<JwtBearerEvents>>();
+				logger.LogInformation("Token validated successfully.");
+				Debug.Print(key.ToString());
+				return Task.CompletedTask;
+			},
+
+			OnAuthenticationFailed = context =>
+			{
+				// Create a logger for the JwtBearerEvents
+				var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<JwtBearerEvents>>();
+				logger.LogError("Token authentication failed: " + context.Exception.Message);
+				return Task.CompletedTask;
+			}
+		};
+
+		// These parameters ensures that the token is validated correctly by intercepting the http requests
+		jwt.TokenValidationParameters = new TokenValidationParameters()
         {
-			//RoleClaimType = "role",
+			RoleClaimType = "role",
 			ValidAlgorithms = new List<string> { SecurityAlgorithms.HmacSha256 },
 			IssuerSigningKey = new SymmetricSecurityKey(key),
 			ValidateIssuerSigningKey = true,
             ValidateIssuer = false, //if true, an issuer is generally the host server for (this) API
             ValidateAudience = false, // if true, validates the expected receiver 
             RequireExpirationTime = false, 
-            ValidateLifetime = true
+            ValidateLifetime = false
 		};
     });
 
@@ -96,6 +120,7 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 .AddRoleStore<RoleStore<IdentityRole, EntityContext, string>>()
 .AddDefaultTokenProviders()
 .AddEntityFrameworkStores<EntityContext>();
+
 
 
 builder.Services.AddControllers();

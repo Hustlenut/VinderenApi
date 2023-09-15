@@ -201,7 +201,10 @@ namespace VinderenApi.Controllers
 {
 					//new Claim("id", user.Id), //Claims the "Id" as user.Id which is a property of IdentityUser.
                     new Claim(ClaimTypes.NameIdentifier, user.Id),
-					new Claim(JwtRegisteredClaimNames.Sub, user.Email),
+					new Claim(ClaimTypes.Name, user.Id),
+					new Claim(ClaimTypes.NameIdentifier, user.Email),
+					new Claim(ClaimTypes.Name, user.Email),
+					new Claim(JwtRegisteredClaimNames.Sub, user.Id),
 					new Claim(JwtRegisteredClaimNames.Email, user.Email),
 					new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
 					new Claim(JwtRegisteredClaimNames.Iat, DateTime.Now.ToUniversalTime().ToString())
