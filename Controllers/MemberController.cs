@@ -10,7 +10,7 @@ namespace VinderenApi.Controllers
 {
 	[ApiController]
 	[Route("api/[controller]")]
-	[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+	[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
 	public class MemberController : AuthController
 	{
 		private readonly UserManager<IdentityUser> _userManager;

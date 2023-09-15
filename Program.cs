@@ -57,6 +57,19 @@ var jwtConfig = new JwtConfig
 
 builder.Services.AddSingleton(jwtConfig);
 
+//Configures the usage of Identity.
+//Essensially connects and configures the EntityContext to the tables like AspNetUser and AspNetRoles in the database.
+builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
+{
+	options.SignIn.RequireConfirmedAccount = false;
+})
+//.AddEntityFrameworkStores<IdentityEntity>();
+.AddRoles<IdentityRole>()
+.AddUserStore<UserStore<IdentityUser, IdentityRole, EntityContext, string>>()
+.AddRoleStore<RoleStore<IdentityRole, EntityContext, string>>()
+.AddDefaultTokenProviders()
+.AddEntityFrameworkStores<EntityContext>();
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -84,20 +97,6 @@ builder.Services.AddAuthentication(options =>
     });
 
 builder.Services.AddAuthorization();
-
-//Configures the usage of Identity.
-//Essensially connects and configures the EntityContext to the tables like AspNetUser and AspNetRoles in the database.
-builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
-{
-    options.SignIn.RequireConfirmedAccount = false;
-})
-//.AddEntityFrameworkStores<IdentityEntity>();
-.AddRoles<IdentityRole>()
-.AddUserStore<UserStore<IdentityUser, IdentityRole, EntityContext, string>>()
-.AddRoleStore<RoleStore<IdentityRole, EntityContext, string>>()
-.AddDefaultTokenProviders()
-.AddEntityFrameworkStores<EntityContext>();
-
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
