@@ -151,8 +151,28 @@ namespace VinderenApi.Controllers
 
 				var claims = new List<Claim>
 				{
-					new Claim("user", existing_user.ToString())
+					new Claim("user", existing_user.ToString()),
+                    //new Claim("role", "Admin")
 				};
+				
+                var userRoles = await _userManager.GetRolesAsync(existing_user);
+
+				foreach (var userRole in userRoles)
+				{
+					claims.Add(new Claim("roles", userRole)); //A new claim of type ClaimTypes.Role is added for each role in the list. This claim is added to the claims collection.
+
+					var role = await _roleManager.FindByNameAsync(userRole); //Retrieves the role entity based on the role name (userRole) from the role manager.
+
+					if (role != null)
+					{
+						var roleClaims = await _roleManager.GetClaimsAsync(role);
+
+						foreach (var roleClaim in roleClaims)
+						{
+							claims.Add(roleClaim);
+						}
+					}
+				}
 
 				var jwtTokenDescr = JwtHelper.GetJwtToken(
                     existing_user.ToString(),

@@ -88,46 +88,23 @@ builder.Services.AddAuthentication(options =>
         jwt.RequireHttpsMetadata = false;
         jwt.SaveToken = true;
 
-		// Log token validation success
-		jwt.Events = new JwtBearerEvents
-		{
-			OnTokenValidated = context =>
-			{
-				// Create a logger for the JwtBearerEvents
-				var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<JwtBearerEvents>>();
-				logger.LogInformation("Token validated successfully.");
-				Debug.Print(key.ToString());
-				return Task.CompletedTask;
-			},
-
-			OnAuthenticationFailed = context =>
-			{
-				// Create a logger for the JwtBearerEvents
-				var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<JwtBearerEvents>>();
-				logger.LogError("Token authentication failed: " + context.Exception.Message);
-				return Task.CompletedTask;
-			}
-		};
-
 		// These parameters ensures that the token is validated correctly by intercepting the http requests
 		jwt.TokenValidationParameters = new TokenValidationParameters()
         {
-            RoleClaimType = "role",
+            //RoleClaimType = "role", why is this one inhibiting the authorization???
 			ValidAlgorithms = new List<string> { SecurityAlgorithms.HmacSha256 },
 			IssuerSigningKey = new SymmetricSecurityKey(key),
 			ValidateIssuerSigningKey = true,
-            ValidateIssuer = false, //if true, an issuer is generally the host server for (this) API
-            ValidateAudience = false, // if true, validates the expected receiver 
+            ValidIssuer = jwtConfig.Issuer,
+            ValidateIssuer = true, //if true, an issuer is generally the host server for (this) API
+            ValidAudience = jwtConfig.Audience,
+            ValidateAudience = true, // if true, validates the expected receiver 
             RequireExpirationTime = false, 
             ValidateLifetime = false
 		};
     });
 
-builder.Services.AddAuthorization(options =>
-{
-	options.AddPolicy("RequireAdminRole", policy =>
-		policy.RequireRole("Admin"));
-});
+builder.Services.AddAuthorization();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
