@@ -59,14 +59,12 @@ builder.Services.AddSingleton(jwtConfig);
 
 //Configures the usage of Identity.
 //Essensially connects and configures the EntityContext to the tables like AspNetUser and AspNetRoles in the database.
-builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
+builder.Services.AddIdentityCore<IdentityUser>(options =>
 {
 	options.SignIn.RequireConfirmedAccount = false;
 })
 //.AddEntityFrameworkStores<IdentityEntity>();
 .AddRoles<IdentityRole>()
-.AddUserStore<UserStore<IdentityUser, IdentityRole, EntityContext, string>>()
-.AddRoleStore<RoleStore<IdentityRole, EntityContext, string>>()
 .AddDefaultTokenProviders()
 .AddEntityFrameworkStores<EntityContext>();
 
