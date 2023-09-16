@@ -20,7 +20,6 @@ namespace VinderenApi.Controllers
         private readonly UserManager<IdentityUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly JwtConfig _jwtConfig;
-        // private readonly IConfiguration _configuration;
         private readonly DbContextOptions<EntityContext> _identityDbContextOptions;
         private readonly ILogger<AuthController> _logger;
         
@@ -28,7 +27,6 @@ namespace VinderenApi.Controllers
         public AuthController(UserManager<IdentityUser> userManager,
             RoleManager<IdentityRole> roleManager,
             JwtConfig jwtConfig,
-            //IConfiguration configuration,
             DbContextOptions<EntityContext> identityDbContextOptions,
             ILogger<AuthController> logger
             )
@@ -36,7 +34,6 @@ namespace VinderenApi.Controllers
             _userManager = userManager;
             _roleManager = roleManager;
             _jwtConfig = jwtConfig;
-            //_configuration = configuration;
             _identityDbContextOptions = identityDbContextOptions;
             _logger = logger;
 
@@ -201,7 +198,7 @@ namespace VinderenApi.Controllers
                 _jwtConfig.Secret,
                 _jwtConfig.Issuer,
                 _jwtConfig.Audience,
-                2,
+                2, //TODO: Re-evalueate 
                 claims.ToArray()
                 );
 
