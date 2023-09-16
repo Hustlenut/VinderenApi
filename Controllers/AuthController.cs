@@ -147,43 +147,8 @@ namespace VinderenApi.Controllers
                         },
                         Result = false
                     });
-				var jwtTokenHandler = new JwtSecurityTokenHandler();
 
-				var claims = new List<Claim>
-				{
-					new Claim("user", existing_user.ToString()),
-                    //new Claim("role", "Admin")
-				};
-				
-                var userRoles = await _userManager.GetRolesAsync(existing_user);
-
-				foreach (var userRole in userRoles)
-				{
-					claims.Add(new Claim("roles", userRole)); //A new claim of type ClaimTypes.Role is added for each role in the list. This claim is added to the claims collection.
-
-					var role = await _roleManager.FindByNameAsync(userRole); //Retrieves the role entity based on the role name (userRole) from the role manager.
-
-					if (role != null)
-					{
-						var roleClaims = await _roleManager.GetClaimsAsync(role);
-
-						foreach (var roleClaim in roleClaims)
-						{
-							claims.Add(roleClaim);
-						}
-					}
-				}
-
-				var jwtTokenDescr = JwtHelper.GetJwtToken(
-                    existing_user.ToString(),
-                    _jwtConfig.Secret,
-                    _jwtConfig.Issuer,
-                    _jwtConfig.Audience,
-                    2,
-                    claims.ToArray()
-                    );
-
-				var jwtToken = jwtTokenHandler.WriteToken(jwtTokenDescr);
+                string jwtToken = await GenerateJwtToken(existing_user);
 
 				return Ok(new AuthResult()
                 {
@@ -205,71 +170,114 @@ namespace VinderenApi.Controllers
         private async Task<string> GenerateJwtToken(IdentityUser user)
         {
             var jwtTokenHandler = new JwtSecurityTokenHandler();
-            var key = _jwtConfig?.Secret != null ? Encoding.UTF8.GetBytes(_jwtConfig.Secret) : null;
-            //var key = Encoding.UTF8.GetBytes(_configuration.GetSection("JwtConfig:Secret").Value);
 
-            var claims = GetAllValidClaims(user);
+            var claims = new List<Claim>
+                {
+                    new Claim("user", user.ToString()),
+                    //new Claim("role", "Admin")
+				};
 
-			//Token descriptor is describing the payload, which is going to allow us to put the configurations needed inside the token.
-			var tokenDescriptor = new SecurityTokenDescriptor()
+            var userRoles = await _userManager.GetRolesAsync(user);
+
+            foreach (var userRole in userRoles)
             {
-                Subject = await claims,
-                Expires = DateTime.Now.AddHours(1),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
+                claims.Add(new Claim("roles", userRole)); //A new claim of type ClaimTypes.Role is added for each role in the list. This claim is added to the claims collection.
 
-			/* Following method is used to create a JwtSecurityToken object, which represents the JWT. 
-			 * Providing the necessary information for the JWT, such as claims, expiration, issuer, audience, and signing credentials. 
-			 * It constructs the token in memory but doesn't encode or sign it. It's like preparing the content of the JWT.*/
-			var token = jwtTokenHandler.CreateToken(tokenDescriptor);
-			/* Following method is used to take the JwtSecurityToken created with CreateToken() and serialize it into a string that 
-			 * represents a JWT in the compact serialization format. This includes encoding the header and payload as Base64Url 
-			 * strings and signing them with the specified signing algorithm and key. It produces the final JWT string that you 
-			 * can use for authentication and authorization purposes.*/
-            var jwtToken = jwtTokenHandler.WriteToken(token);
+                var role = await _roleManager.FindByNameAsync(userRole); //Retrieves the role entity based on the role name (userRole) from the role manager.
+
+                if (role != null)
+                {
+                    var roleClaims = await _roleManager.GetClaimsAsync(role);
+
+                    foreach (var roleClaim in roleClaims)
+                    {
+                        claims.Add(roleClaim);
+                    }
+                }
+            }
+
+            var jwtTokenDescr = JwtHelper.GetJwtToken(
+                user.ToString(),
+                _jwtConfig.Secret,
+                _jwtConfig.Issuer,
+                _jwtConfig.Audience,
+                2,
+                claims.ToArray()
+                );
+
+            var jwtToken = jwtTokenHandler.WriteToken(jwtTokenDescr);
 
             return jwtToken;
-
         }
 
-        private async Task<ClaimsIdentity> GetAllValidClaims(IdentityUser user) //Using ClaimsIdentity because SecurityTokenDescriptor.Subject requires it.
-		{
-			var claims = new ClaimsIdentity(new[]
-{
-					//new Claim("id", user.Id), //Claims the "Id" as user.Id which is a property of IdentityUser.
-                    new Claim(ClaimTypes.NameIdentifier, user.Id),
-					new Claim(ClaimTypes.Name, user.Id),
-					new Claim(ClaimTypes.NameIdentifier, user.Email),
-					new Claim(ClaimTypes.Name, user.Email),
-					new Claim(JwtRegisteredClaimNames.Sub, user.Id),
-					new Claim(JwtRegisteredClaimNames.Email, user.Email),
-					new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-					new Claim(JwtRegisteredClaimNames.Iat, DateTime.Now.ToUniversalTime().ToString())
-			});
+        //        private async Task<string> GenerateJwtToken(IdentityUser user)
+        //        {
+        //            var jwtTokenHandler = new JwtSecurityTokenHandler();
+        //            var key = _jwtConfig?.Secret != null ? Encoding.UTF8.GetBytes(_jwtConfig.Secret) : null;
+        //            //var key = Encoding.UTF8.GetBytes(_configuration.GetSection("JwtConfig:Secret").Value);
 
-			// Get the user role and add it to the claims
-			var userRoles = await _userManager.GetRolesAsync(user); //Gets a list of user roles the user belongs to
+        //            var claims = GetAllValidClaims(user);
 
-			/*The first loop adds a claim for each role the user belongs to, 
-			 * and the second loop adds any additional claims associated with each of those roles. In the case where a role can have additional claims*/
-			foreach (var userRole in userRoles)
-			{
-				claims.AddClaim(new Claim(ClaimTypes.Role, userRole)); //A new claim of type ClaimTypes.Role is added for each role in the list. This claim is added to the claims collection.
+        //			//Token descriptor is describing the payload, which is going to allow us to put the configurations needed inside the token.
+        //			var tokenDescriptor = new SecurityTokenDescriptor()
+        //            {
+        //                Subject = await claims,
+        //                Expires = DateTime.Now.AddHours(1),
+        //                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+        //            };
 
-				var role = await _roleManager.FindByNameAsync(userRole); //Retrieves the role entity based on the role name (userRole) from the role manager.
+        //			/* Following method is used to create a JwtSecurityToken object, which represents the JWT. 
+        //			 * Providing the necessary information for the JWT, such as claims, expiration, issuer, audience, and signing credentials. 
+        //			 * It constructs the token in memory but doesn't encode or sign it. It's like preparing the content of the JWT.*/
+        //			var token = jwtTokenHandler.CreateToken(tokenDescriptor);
+        //			/* Following method is used to take the JwtSecurityToken created with CreateToken() and serialize it into a string that 
+        //			 * represents a JWT in the compact serialization format. This includes encoding the header and payload as Base64Url 
+        //			 * strings and signing them with the specified signing algorithm and key. It produces the final JWT string that you 
+        //			 * can use for authentication and authorization purposes.*/
+        //            var jwtToken = jwtTokenHandler.WriteToken(token);
 
-				if (role != null)
-				{
-					var roleClaims = await _roleManager.GetClaimsAsync(role);
+        //            return jwtToken;
 
-					foreach (var roleClaim in roleClaims)
-					{
-						claims.AddClaim(roleClaim);
-					}
-				}
-			}
+        //        }
 
-            return claims;
-		}
+        //        private async Task<ClaimsIdentity> GetAllValidClaims(IdentityUser user) //Using ClaimsIdentity because SecurityTokenDescriptor.Subject requires it.
+        //		{
+        //			var claims = new ClaimsIdentity(new[]
+        //{
+        //					//new Claim("id", user.Id), //Claims the "Id" as user.Id which is a property of IdentityUser.
+        //                    new Claim(ClaimTypes.NameIdentifier, user.Id),
+        //					new Claim(ClaimTypes.Name, user.Id),
+        //					new Claim(ClaimTypes.NameIdentifier, user.Email),
+        //					new Claim(ClaimTypes.Name, user.Email),
+        //					new Claim(JwtRegisteredClaimNames.Sub, user.Id),
+        //					new Claim(JwtRegisteredClaimNames.Email, user.Email),
+        //					new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+        //					new Claim(JwtRegisteredClaimNames.Iat, DateTime.Now.ToUniversalTime().ToString())
+        //			});
+
+        //			// Get the user role and add it to the claims
+        //			var userRoles = await _userManager.GetRolesAsync(user); //Gets a list of user roles the user belongs to
+
+        //			/*The first loop adds a claim for each role the user belongs to, 
+        //			 * and the second loop adds any additional claims associated with each of those roles. In the case where a role can have additional claims*/
+        //			foreach (var userRole in userRoles)
+        //			{
+        //				claims.AddClaim(new Claim(ClaimTypes.Role, userRole)); //A new claim of type ClaimTypes.Role is added for each role in the list. This claim is added to the claims collection.
+
+        //				var role = await _roleManager.FindByNameAsync(userRole); //Retrieves the role entity based on the role name (userRole) from the role manager.
+
+        //				if (role != null)
+        //				{
+        //					var roleClaims = await _roleManager.GetClaimsAsync(role);
+
+        //					foreach (var roleClaim in roleClaims)
+        //					{
+        //						claims.AddClaim(roleClaim);
+        //					}
+        //				}
+        //			}
+
+        //            return claims;
+        //		}
     }
 }

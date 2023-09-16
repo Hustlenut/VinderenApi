@@ -22,10 +22,10 @@ namespace VinderenApi.Configurations
 		/// <param name="additionalClaims"></param>
 		/// <returns></returns>
 		public static JwtSecurityToken GetJwtToken(
-			string username,
-			string uniqueKey,
-			string issuer,
-			string audience,
+			string? username,
+			string? uniqueKey,
+			string? issuer,
+			string? audience,
 			Double expiration,
 			Claim[]? additionalClaims = null)
 		{
@@ -65,12 +65,12 @@ namespace VinderenApi.Configurations
 		/// <param name="additionalClaims"></param>
 		/// <returns></returns>
 		public static string GetJwtTokenString(
-			string username,
-			string uniqueKey,
-			string issuer,
-			string audience,
+			string? username,
+			string? uniqueKey,
+			string? issuer,
+			string? audience,
 			Double expiration,
-			Claim[] additionalClaims = null)
+			Claim[]? additionalClaims = null)
 		{
 			var token = GetJwtToken(username, uniqueKey, issuer, audience, expiration, additionalClaims);
 			return new JwtSecurityTokenHandler().WriteToken(token);
