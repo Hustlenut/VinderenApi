@@ -6,6 +6,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using VinderenApi.DbContext;
 using VinderenApi.Configurations;
+using Microsoft.AspNetCore.Hosting;
+using System.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
 //TODO: Provide secure policies
@@ -17,7 +19,6 @@ builder.Services.AddCors(
                 .AllowAnyHeader()
                 .AllowAnyOrigin()
                 .AllowAnyMethod()
-
         );
     }
 );
@@ -46,13 +47,17 @@ builder.Services.AddDbContext<EntityContext>(options =>
 //TODO: Need to configure secret for production pipeline...
 
 // Create a singleton from a secret value to later generate a JWT token...
-var jwtConfigValue = builder.Configuration["Secret2:JwtConfig"];
+var jwtConfigSecret = builder.Configuration["Secret2:JwtConfigSecret"];
+var jwtConfigIssuer = builder.Configuration["Secret3:JwtConfigIssuer"];
+var jwtConfigAudience = builder.Configuration["Secret4:JwtConfigAudience"];
 
 //TODO: Need to configure secret2 for production pipeline...
 
 var jwtConfig = new JwtConfig
 {
-    Secret = jwtConfigValue
+    Secret = jwtConfigSecret,
+    Issuer = jwtConfigIssuer,
+    Audience = jwtConfigAudience
 };
 
 builder.Services.AddSingleton(jwtConfig);
@@ -63,7 +68,6 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 {
 	options.SignIn.RequireConfirmedAccount = false;
 })
-//.AddEntityFrameworkStores<IdentityEntity>();
 .AddRoles<IdentityRole>()
 .AddUserStore<UserStore<IdentityUser, IdentityRole, EntityContext, string>>()
 .AddRoleStore<RoleStore<IdentityRole, EntityContext, string>>()
@@ -79,20 +83,23 @@ builder.Services.AddAuthentication(options =>
     .AddJwtBearer(jwt =>
     {
         var key = Encoding.ASCII.GetBytes(jwtConfig.Secret); // Upon receiving the token back from the client, this specifies where the "authorizer" should be comparing.
-
+        
         jwt.RequireHttpsMetadata = false;
         jwt.SaveToken = true;
-        // These parameters ensures that the token is validated correctly by intercepting the http requests
-        jwt.TokenValidationParameters = new TokenValidationParameters()
+
+		// These parameters ensures that the token is validated correctly by intercepting the http requests
+		jwt.TokenValidationParameters = new TokenValidationParameters()
         {
-			RoleClaimType = "role",
-			ValidateIssuerSigningKey = true,
+            //RoleClaimType = "role", why is this one inhibiting the authorization???
 			ValidAlgorithms = new List<string> { SecurityAlgorithms.HmacSha256 },
-			IssuerSigningKey = new SymmetricSecurityKey(key), 
-            ValidateIssuer = false, //if true, an issuer is generally the host server for (this) API
-            ValidateAudience = false, // if true, validates the expected receiver 
+			IssuerSigningKey = new SymmetricSecurityKey(key),
+			ValidateIssuerSigningKey = true,
+            ValidIssuer = jwtConfig.Issuer,
+            ValidateIssuer = true, //if true, an issuer is generally the host server for (this) API
+            ValidAudience = jwtConfig.Audience,
+            ValidateAudience = true, // if true, validates the expected receiver 
             RequireExpirationTime = false, 
-            ValidateLifetime = true
+            ValidateLifetime = false
 		};
     });
 
@@ -113,6 +120,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("AllowAll");
 
 app.UseAuthentication();
 

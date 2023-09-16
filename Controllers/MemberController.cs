@@ -8,10 +8,10 @@ using VinderenApi.DbContext;
 
 namespace VinderenApi.Controllers
 {
+	[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
 	[ApiController]
 	[Route("api/[controller]")]
-	[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
-	public class MemberController : AuthController
+	public class MemberController : ControllerBase
 	{
 		private readonly UserManager<IdentityUser> _userManager;
 		private readonly RoleManager<IdentityRole> _roleManager;
@@ -21,8 +21,7 @@ namespace VinderenApi.Controllers
 			RoleManager<IdentityRole> roleManager, 
 			JwtConfig jwtConfig, 
 			DbContextOptions<EntityContext> identityDbContextOptions, 
-			ILogger<AuthController> logger) : 
-				base(userManager, roleManager, jwtConfig, identityDbContextOptions, logger)
+			ILogger<AuthController> logger) 
 		{
 			_userManager = userManager;
 			_roleManager = roleManager;
