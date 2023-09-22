@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "NY21R/V/jRaLoQ+/0rxofT+GGxLV97+BGQo8qaLtL3iL61qoTw3BxbRI4ggFzJflPUvR56q3CIcs/ViM48zxIw==",
+  "dgSpecHash": "+sKn+cS7ZmH9jIVIcyX2ywE669mGLqqJavCtih1jvUeaufwEZkPzh283yLg1IF8abXIb7wlPuRZvHit/S0wtbA==",
   "success": true,
   "projectFilePath": "C:\\Users\\huy_x\\source\\repos\\VinderenApi\\VinderenApi.csproj",
   "expectedPackageFiles": [
@@ -39,6 +39,7 @@
     "C:\\Users\\huy_x\\.nuget\\packages\\microsoft.identitymodel.tokens\\6.10.0\\microsoft.identitymodel.tokens.6.10.0.nupkg.sha512",
     "C:\\Users\\huy_x\\.nuget\\packages\\microsoft.netcore.platforms\\3.1.0\\microsoft.netcore.platforms.3.1.0.nupkg.sha512",
     "C:\\Users\\huy_x\\.nuget\\packages\\microsoft.openapi\\1.2.3\\microsoft.openapi.1.2.3.nupkg.sha512",
+    "C:\\Users\\huy_x\\.nuget\\packages\\microsoft.visualstudio.azure.containers.tools.targets\\1.17.0\\microsoft.visualstudio.azure.containers.tools.targets.1.17.0.nupkg.sha512",
     "C:\\Users\\huy_x\\.nuget\\packages\\microsoft.win32.registry\\4.7.0\\microsoft.win32.registry.4.7.0.nupkg.sha512",
     "C:\\Users\\huy_x\\.nuget\\packages\\microsoft.win32.systemevents\\4.7.0\\microsoft.win32.systemevents.4.7.0.nupkg.sha512",
     "C:\\Users\\huy_x\\.nuget\\packages\\swashbuckle.aspnetcore\\6.5.0\\swashbuckle.aspnetcore.6.5.0.nupkg.sha512",
