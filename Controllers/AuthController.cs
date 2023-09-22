@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace VinderenApi.Controllers
 {
-    [Route("api/auth/[controller]")]
+    [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
         private readonly UserManager<IdentityUser> _userManager;
