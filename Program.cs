@@ -8,6 +8,8 @@ using VinderenApi.DbContext;
 using VinderenApi.Configurations;
 using Microsoft.AspNetCore.Hosting;
 using System.Diagnostics;
+using Microsoft.AspNetCore;
+
 
 var builder = WebApplication.CreateBuilder(args);
 //TODO: Provide secure policies
@@ -117,6 +119,9 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+} else if(app.Environment.IsProduction())
+{
+    app.Urls.Add("http://0.0.0.0:80"); // Listen on 0.0.0.0:80 for production in Render
 }
 
 app.UseHttpsRedirection();
