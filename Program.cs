@@ -122,6 +122,7 @@ if (app.Environment.IsDevelopment())
 } else if(app.Environment.IsProduction())
 {
     app.Urls.Add("http://0.0.0.0:80"); // Listen on 0.0.0.0:80 for production in Render
+    //TODO: Possible to replace all secret strings in this stage of the code with the production env. variables?
 }
 
 app.UseHttpsRedirection();
