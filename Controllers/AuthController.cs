@@ -11,6 +11,7 @@ using VinderenApi.Models.DTO;
 using VinderenApi.Authentication;
 using VinderenApi.Configurations;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace VinderenApi.Controllers
 {
@@ -22,13 +23,22 @@ namespace VinderenApi.Controllers
         private readonly JwtConfig _jwtConfig;
         private readonly DbContextOptions<EntityContext> _identityDbContextOptions;
         private readonly ILogger<AuthController> _logger;
-        
+		private readonly IMemoryCache _memoryCache;
+        private readonly CacheKeyConfig _cacheKeyConfig;
+        private string loginAttemptsCacheKeyPrefix;
+        //See here: I did not have to instantiate the LoginAttemptInfo class here or anything right?
 
-        public AuthController(UserManager<IdentityUser> userManager,
+        private int maxLoginAttempts = 5;
+        private int baseDelaySeconds = 5;
+        //INFO TO FRONTEND: The login attempt delay is doubling the delay on each attempt.
+
+
+		public AuthController(UserManager<IdentityUser> userManager,
             RoleManager<IdentityRole> roleManager,
             JwtConfig jwtConfig,
             DbContextOptions<EntityContext> identityDbContextOptions,
-            ILogger<AuthController> logger
+            ILogger<AuthController> logger,
+            IMemoryCache memoryCache
             )
         {
             _userManager = userManager;
@@ -36,6 +46,7 @@ namespace VinderenApi.Controllers
             _jwtConfig = jwtConfig;
             _identityDbContextOptions = identityDbContextOptions;
             _logger = logger;
+            _memoryCache = memoryCache;
 
 
         }
@@ -47,8 +58,8 @@ namespace VinderenApi.Controllers
             //Validate incoming request
             if (ModelState.IsValid) //if all the conditions are complied in UserRegRequestDto...
             {
-                //Need to check if the email already exists
-                var user_exist = await _userManager.FindByEmailAsync(requestDto.Email);
+				//Need to check if the email already exists
+				var user_exist = await _userManager.FindByEmailAsync(requestDto.Email);
 
                 if (user_exist != null)
                 {
@@ -118,8 +129,41 @@ namespace VinderenApi.Controllers
         {
             if (ModelState.IsValid)
             {
-                //check if user exist
-                var existing_user = await _userManager.FindByEmailAsync(loginRequest.Email);
+                loginAttemptsCacheKeyPrefix = AssignLoginCacheKey(); //Null value is handled in method
+				// Create a cache key for the user's login attempts based additionally on the email.
+				string cacheKey = $"{loginAttemptsCacheKeyPrefix}:{loginRequest.Email}";
+
+				// Try to retrieve the login attempts counter from the cache
+				if (!_memoryCache.TryGetValue(cacheKey, out LoginAttemptInfo loginAttemptInfo))
+				{
+					loginAttemptInfo = new LoginAttemptInfo
+					{
+						Attempts = 0,
+						ExpiryDate = DateTime.Now
+					};
+				}
+
+                // If current date-time is less than the expiry date-time, it means the key has not expired
+                if (DateTime.Now < loginAttemptInfo.ExpiryDate)
+                {
+                    if (loginAttemptInfo.Attempts >= maxLoginAttempts)
+                    {
+                        return BadRequest(new AuthResult()
+                        {
+                            Errors = new List<string>()
+                            {
+                                "Too many login attempts. Please try again later."
+                            },
+                            Result = false
+                        });
+                    }
+					// Enforce the delay currently stored in cache
+					int delaySeconds = (int)Math.Pow(2, loginAttemptInfo.Attempts) * baseDelaySeconds; //basically 2^loginAttemptInfo.Attempts * baseDelaySeconds
+					await Task.Delay(TimeSpan.FromSeconds(delaySeconds));
+				}
+
+					//Check if user exist
+					var existing_user = await _userManager.FindByEmailAsync(loginRequest.Email);
 
                 if (existing_user == null)
                 {
@@ -133,10 +177,20 @@ namespace VinderenApi.Controllers
                     });
                 }
 
-                var isCorrect = await _userManager.CheckPasswordAsync(existing_user, loginRequest.Password); 
+                var isCorrect = await _userManager.CheckPasswordAsync(existing_user, loginRequest.Password);
                 //Because without await, the code would continue executing immediately after calling CheckPasswordAsync, which might result in incorrect behavior because you would not have the result of the validation yet. 
                 if (!isCorrect)
-                    return BadRequest(new AuthResult()
+                {
+					// Increment the login attempts counter 
+					loginAttemptInfo.Attempts++;
+
+					// Calculate the delay based on the number of failed attempts (doubling on each consecutive attempt)
+					int delaySeconds = (int)Math.Pow(2, loginAttemptInfo.Attempts - 1) * baseDelaySeconds;
+
+					// Store the updated login attempts counter in the cache with an expiration time
+					_memoryCache.Set(cacheKey, loginAttemptInfo, TimeSpan.FromSeconds(delaySeconds)); //The exp. time automatically removes the item from cache once the time is due.
+
+					return BadRequest(new AuthResult()
                     {
                         Errors = new List<string>()
                         {
@@ -144,6 +198,7 @@ namespace VinderenApi.Controllers
                         },
                         Result = false
                     });
+                }
 
                 string jwtToken = await GenerateJwtToken(existing_user);
 
@@ -205,6 +260,19 @@ namespace VinderenApi.Controllers
             var jwtToken = jwtTokenHandler.WriteToken(jwtTokenDescr);
 
             return jwtToken;
+        }
+
+        private string? AssignLoginCacheKey()
+        {
+            if (_cacheKeyConfig.LoginAttemptsCacheKeyPrefix != null)
+            {
+                string loginAttemptsCacheKeyPrefix = _cacheKeyConfig.LoginAttemptsCacheKeyPrefix;
+                return loginAttemptsCacheKeyPrefix;
+            }else
+            {
+                Console.Error.WriteLine("Login cache key could not be assigned");
+                return null;
+            }
         }
 
         //        private async Task<string> GenerateJwtToken(IdentityUser user)

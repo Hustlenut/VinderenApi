@@ -46,14 +46,13 @@ builder.Services.AddDbContext<EntityContext>(options =>
     options.UseLoggerFactory(LoggerFactory.Create(builder => builder.AddDebug())); //To log DB interactions in EF Core, like "SaveChanges()"
 });
 
-//TODO: Need to configure secret for production pipeline...
 
 // Create a singleton from a secret value to later generate a JWT token...
 var jwtConfigSecret = builder.Configuration["Secret2:JwtConfigSecret"];
 var jwtConfigIssuer = builder.Configuration["Secret3:JwtConfigIssuer"];
 var jwtConfigAudience = builder.Configuration["Secret4:JwtConfigAudience"];
+var loginAttemptsCacheKeyPrefix = builder.Configuration["Secret5:LoginAttemptsCacheKeyPrefix"];
 
-//TODO: Need to configure secret2 for production pipeline...
 
 var jwtConfig = new JwtConfig
 {
@@ -62,7 +61,13 @@ var jwtConfig = new JwtConfig
     Audience = jwtConfigAudience
 };
 
+var cacheKeyConfig = new CacheKeyConfig
+{
+    LoginAttemptsCacheKeyPrefix = loginAttemptsCacheKeyPrefix
+};
+
 builder.Services.AddSingleton(jwtConfig);
+builder.Services.AddSingleton(cacheKeyConfig);
 
 //Configures the usage of Identity.
 //Essensially connects and configures the EntityContext to the tables like AspNetUser and AspNetRoles in the database.
