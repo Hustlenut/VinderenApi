@@ -47,7 +47,7 @@ builder.Services.AddDbContext<EntityContext>(options =>
 });
 
 
-// Create a singleton from a secret value to later generate a JWT token...
+// Create a singletons from secret values
 var jwtConfigSecret = builder.Configuration["Secret2:JwtConfigSecret"];
 var jwtConfigIssuer = builder.Configuration["Secret3:JwtConfigIssuer"];
 var jwtConfigAudience = builder.Configuration["Secret4:JwtConfigAudience"];

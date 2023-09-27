@@ -26,7 +26,6 @@ namespace VinderenApi.Controllers
 		private readonly IMemoryCache _memoryCache;
         private readonly CacheKeyConfig _cacheKeyConfig;
         private string loginAttemptsCacheKeyPrefix;
-        //See here: I did not have to instantiate the LoginAttemptInfo class here or anything right?
 
         private int maxLoginAttempts = 5;
         private int baseDelaySeconds = 5;
@@ -38,7 +37,8 @@ namespace VinderenApi.Controllers
             JwtConfig jwtConfig,
             DbContextOptions<EntityContext> identityDbContextOptions,
             ILogger<AuthController> logger,
-            IMemoryCache memoryCache
+            IMemoryCache memoryCache,
+            CacheKeyConfig cacheKeyConfig
             )
         {
             _userManager = userManager;
@@ -47,6 +47,7 @@ namespace VinderenApi.Controllers
             _identityDbContextOptions = identityDbContextOptions;
             _logger = logger;
             _memoryCache = memoryCache;
+            _cacheKeyConfig = cacheKeyConfig;
 
 
         }
@@ -133,13 +134,13 @@ namespace VinderenApi.Controllers
 				// Create a cache key for the user's login attempts based additionally on the email.
 				string cacheKey = $"{loginAttemptsCacheKeyPrefix}:{loginRequest.Email}";
 
-				// Try to retrieve the login attempts counter from the cache
+				// Try to retrieve the login attempts counter from the cache, if there is none...
 				if (!_memoryCache.TryGetValue(cacheKey, out LoginAttemptInfo loginAttemptInfo))
 				{
 					loginAttemptInfo = new LoginAttemptInfo
 					{
 						Attempts = 0,
-						ExpiryDate = DateTime.Now
+						ExpiryDate = DateTime.Now.AddMinutes(60) //A non-expired key is necessary to continue.
 					};
 				}
 
@@ -159,15 +160,24 @@ namespace VinderenApi.Controllers
                     }
 					// Enforce the delay currently stored in cache
 					int delaySeconds = (int)Math.Pow(2, loginAttemptInfo.Attempts) * baseDelaySeconds; //basically 2^loginAttemptInfo.Attempts * baseDelaySeconds
+                    Console.WriteLine($"Init delay: {delaySeconds}");
 					await Task.Delay(TimeSpan.FromSeconds(delaySeconds));
 				}
 
 					//Check if user exist
 					var existing_user = await _userManager.FindByEmailAsync(loginRequest.Email);
 
-                if (existing_user == null)
+                if (existing_user == null) //If no user is found, there is no need to check for password, hence the return statement here
                 {
-                    return BadRequest(new AuthResult()
+					loginAttemptInfo.Attempts++;
+
+					// Calculate the delay based on the number of failed attempts (doubling on each consecutive attempt)
+					int delaySeconds = (int)Math.Pow(2, loginAttemptInfo.Attempts - 1) * baseDelaySeconds;
+
+					// Store the updated login attempts counter in the cache with an expiration time
+					_memoryCache.Set(cacheKey, loginAttemptInfo, loginAttemptInfo.ExpiryDate - DateTime.Now); //The exp. time automatically removes the item from cache once the time is due.
+
+					return BadRequest(new AuthResult()
                     {
                         Errors = new List<string>()
                         {
@@ -188,7 +198,7 @@ namespace VinderenApi.Controllers
 					int delaySeconds = (int)Math.Pow(2, loginAttemptInfo.Attempts - 1) * baseDelaySeconds;
 
 					// Store the updated login attempts counter in the cache with an expiration time
-					_memoryCache.Set(cacheKey, loginAttemptInfo, TimeSpan.FromSeconds(delaySeconds)); //The exp. time automatically removes the item from cache once the time is due.
+					_memoryCache.Set(cacheKey, loginAttemptInfo, loginAttemptInfo.ExpiryDate - DateTime.Now); //The exp. time automatically removes the item from cache once the time is due.
 
 					return BadRequest(new AuthResult()
                     {
@@ -270,8 +280,8 @@ namespace VinderenApi.Controllers
                 return loginAttemptsCacheKeyPrefix;
             }else
             {
-                Console.Error.WriteLine("Login cache key could not be assigned");
-                return null;
+				_logger.LogError("Login cache key could not be assigned");
+				return null;
             }
         }
 
