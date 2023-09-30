@@ -69,7 +69,7 @@ namespace VinderenApi.Controllers
                         Result = false,
                         Errors = new List<string>()
                         {
-                            "Email already exist"
+                            "Eposten eksisterer allerede"
                         }
                     });
                 }
@@ -114,7 +114,7 @@ namespace VinderenApi.Controllers
                 {
                     Errors = new List<string>()
                     {
-                        "Server error"
+                        "Server feil..."
                     },
                     Result = false
                 });
@@ -153,7 +153,7 @@ namespace VinderenApi.Controllers
                         {
                             Errors = new List<string>()
                             {
-                                "Too many login attempts. Please try again later."
+                                "For mange forsøk har blitt brukt. Prøv igjen senere."
                             },
                             Result = false
                         });
@@ -164,8 +164,8 @@ namespace VinderenApi.Controllers
 					await Task.Delay(TimeSpan.FromSeconds(delaySeconds));
 				}
 
-					//Check if user exist
-					var existing_user = await _userManager.FindByEmailAsync(loginRequest.Email);
+				//Check if user exist
+				var existing_user = await _userManager.FindByEmailAsync(loginRequest.Email);
 
                 if (existing_user == null) //If no user is found, there is no need to check for password, hence the return statement here
                 {
@@ -181,7 +181,7 @@ namespace VinderenApi.Controllers
                     {
                         Errors = new List<string>()
                         {
-                            "Invalid payload"
+                            "Ugyldig nyttelast"
                         },
                         Result = false
                     });
@@ -204,7 +204,7 @@ namespace VinderenApi.Controllers
                     {
                         Errors = new List<string>()
                         {
-                            "Invalid credentials"
+                            "Ugyldig legimitasjon"
                         },
                         Result = false
                     });
@@ -223,7 +223,7 @@ namespace VinderenApi.Controllers
             {
                 Errors = new List<string>()
                 {
-                    "Invalid payload"
+                    "Ugyldig nyttelast"
                 },
                 Result = false
             });
