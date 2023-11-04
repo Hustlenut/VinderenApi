@@ -1,15 +1,12 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using VinderenApi.DbContext;
 using VinderenApi.Configurations;
-using Microsoft.AspNetCore.Hosting;
-using System.Diagnostics;
-using Microsoft.AspNetCore;
-
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 //TODO: Provide secure policies
@@ -38,12 +35,13 @@ builder.Services.AddRazorPages()
 // Get the secret connection string before declaring the var.
 builder.Configuration.AddUserSecrets<Program>();
 // For development:
-var dbConn = builder.Configuration["Secret:SmarterASPNET"];
+var dbConn = builder.Configuration["Secret:fileless"];
 
 builder.Services.AddDbContext<EntityContext>(options =>
 {
-    options.UseSqlServer(dbConn); //builder.Configuration.GetConnectionString() gets the string from appsettings.
-    options.UseLoggerFactory(LoggerFactory.Create(builder => builder.AddDebug())); //To log DB interactions in EF Core, like "SaveChanges()"
+	//options.UseSqlServer(dbConn); //builder.Configuration.GetConnectionString() gets the string from appsettings.
+	options.UseMySql(dbConn, new MySqlServerVersion(new Version(8, 0, 29)));
+	options.UseLoggerFactory(LoggerFactory.Create(builder => builder.AddDebug())); //To log DB interactions in EF Core, like "SaveChanges()"
 });
 
 
